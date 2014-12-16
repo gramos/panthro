@@ -3,13 +3,11 @@ require 'net/http'
 class RubygemsProxyCache
 
   def call( env )
-    @env = env
+    @env      = env
+    file_path = "#{ self.class.path }#{ env['PATH_INFO'] }"
 
-    if File.exists? "#{ self.class.path }#{ env['PATH_INFO'] }"
-      get_from_local_file "#{ self.class.path }#{ env['PATH_INFO'] }"
-    else
-      get_from_mirror uri_str
-    end
+    return get_from_cache file_path if File.exists? file_path
+    get_from_mirror uri_str
   end
 
   def uri_str
@@ -30,7 +28,7 @@ class RubygemsProxyCache
     resp
   end
 
-  def get_from_mirror(uri_str)
+  def get_from_mirror( uri_str )
     uri  = URI( uri_str )
     resp = get( uri )
     write_cache!( resp, uri.path )
@@ -38,7 +36,7 @@ class RubygemsProxyCache
     [ resp.code, resp.header, [ resp.body ] ]
   end
 
-  def write_cache!(resp, path)
+  def write_cache!( resp, path )
     return if path =~ /\/api\//
     return unless resp.code =~ /20/
 
@@ -50,8 +48,8 @@ class RubygemsProxyCache
     end
   end
 
-  def get_from_local_file(file_path)
-    file    = File.open(file_path, "r")
+  def get_from_cache( file_path )
+    file    = File.open( file_path, "r" )
     content = file.read
     file.close
 
