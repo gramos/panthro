@@ -1,8 +1,11 @@
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
 require 'rack/test'
-require './lib/panthro'
+require 'panthro'
 
 include Rack::Test::Methods
 
+Panthro.path = File.expand_path('../cache', __FILE__)
 `rm -rf #{ Panthro.path }/*`
 
 def app

@@ -1,5 +1,5 @@
-Rubygems Proxy Cache
-====================
+Panthro: the rubygems proxy cache
+=================================
 
 The idea is to speed up the gem command caching gem and spec files.
 Rubygems proxu cahce Is a rack app that cache static files into a
@@ -9,15 +9,13 @@ Install
 =======
 
 ```
-git clone git@github.com:gramos/rubygems-proxy-cache.git
-cd rubygems-proxy-cache
-rackup
+gem install panthro
+panthro
 ```
-
 Once is running you have to point rubygems to this new "mirror"
 
 ```
-gem sources --add http://localhost:9292
+gem sources --add http://localhost:4732
 ```
 
 And remove rubygems mirror:

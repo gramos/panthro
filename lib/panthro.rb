@@ -10,6 +10,10 @@ class Panthro
     get_from_mirror
   end
 
+  class << self
+    attr_accessor :path
+  end
+
   def uri_str
     uri  = "http://rubygems.org#{ @env['PATH_INFO'] }"
     uri += "?#{ @env['QUERY_STRING'] }" unless @env['QUERY_STRING'].empty?
@@ -54,9 +58,5 @@ class Panthro
     file.close
 
     [ 200, {}, [ content ] ]
-  end
-
-  def self.path
-    '/home/gramos/srcs/rubygems-proxy-cache/cache'
   end
 end
