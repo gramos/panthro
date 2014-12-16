@@ -21,9 +21,9 @@ class Panthro
   end
 
   def get( uri )
-    resp = Net::HTTP.start( uri.host ) do |http|
-      http.get( uri.path )
-    end
+    http    = Net::HTTP.new( uri.host, uri.port )
+    request = Net::HTTP::Get.new( uri.request_uri )
+    resp    = http.request( request )
 
     if resp.code == '302'
       resp = get( URI( resp['location'] ) )
@@ -37,7 +37,7 @@ class Panthro
     resp = get( uri )
     write_cache!( resp, uri.path )
 
-    [ resp.code, resp.header, [ resp.body ] ]
+    [ resp.code, resp.to_hash, [ resp.body ] ]
   end
 
   def write_cache!( resp, path )
