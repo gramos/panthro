@@ -1,6 +1,6 @@
 require 'net/http'
 
-class RubygemsProxyCache
+class Panthro
 
   def call( env )
     @env       = env

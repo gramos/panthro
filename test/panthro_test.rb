@@ -1,19 +1,19 @@
 require 'rack/test'
-require './lib/rubygems_proxy_cache'
+require './lib/panthro'
 
 include Rack::Test::Methods
 
-`rm -rf #{ RubygemsProxyCache.path }/*`
+`rm -rf #{ Panthro.path }/*`
 
 def app
-  RubygemsProxyCache.new
+  Panthro.new
 end
 
 test 'should not cache api calls' do
   head '/api/v1/dependencies'
 
   assert last_response.ok?
-  assert !File.directory?( "#{ RubygemsProxyCache.path }/api/v1" )
+  assert !File.directory?( "#{ Panthro.path }/api/v1" )
 end
 
 test 'should redirect the query' do
@@ -26,15 +26,15 @@ test 'should return the same response code got it from rubygems' do
   get '/not-exists'
 
   assert last_response.status == 404
-  assert !File.exists?( "#{ RubygemsProxyCache.path }/not-exists" )
+  assert !File.exists?( "#{ Panthro.path }/not-exists" )
 end
 
 test 'should cache static files' do
   spec_file_path = '/quick/Marshal.4.8/sinatra-1.4.5.gemspec.rz'
-  assert !File.exists?( "#{ RubygemsProxyCache.path }#{ spec_file_path }" )
+  assert !File.exists?( "#{ Panthro.path }#{ spec_file_path }" )
 
   get spec_file_path
 
   assert last_response.ok?
-  assert File.exists?( "#{ RubygemsProxyCache.path }#{ spec_file_path }" )
+  assert File.exists?( "#{ Panthro.path }#{ spec_file_path }" )
 end
