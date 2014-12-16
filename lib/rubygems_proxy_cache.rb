@@ -3,11 +3,19 @@ require 'net/http'
 class RubygemsProxyCache
 
   def call( env )
+    @env = env
+
     if File.exists? "#{ self.class.path }#{ env['PATH_INFO'] }"
       get_from_local_file "#{ self.class.path }#{ env['PATH_INFO'] }"
     else
-      get_from_mirror "http://rubygems.org#{ env['PATH_INFO'] }"
+      get_from_mirror uri_str
     end
+  end
+
+  def uri_str
+    uri  = "http://rubygems.org#{ @env['PATH_INFO'] }"
+    uri += "?#{ @env['QUERY_STRING'] }" unless @env['QUERY_STRING'].empty?
+    uri
   end
 
   def get( uri )
@@ -25,12 +33,15 @@ class RubygemsProxyCache
   def get_from_mirror(uri_str)
     uri  = URI( uri_str )
     resp = get( uri )
-    write_cache!( resp, uri.path ) unless uri.path =~ /\/api\//
+    write_cache!( resp, uri.path )
 
     [ resp.code, resp.header, [ resp.body ] ]
   end
 
   def write_cache!(resp, path)
+    return if path =~ /\/api\//
+    return unless resp.code =~ /20/
+
     dir = File.dirname( "#{ self.class.path }#{ path }" )
     FileUtils.mkdir_p( dir ) unless File.directory?( dir )
 
