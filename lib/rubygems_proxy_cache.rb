@@ -3,8 +3,8 @@ require 'net/http'
 class RubygemsProxyCache
 
   def call( env )
-    if File.exists? "#{ cache_path }#{ env['PATH_INFO'] }"
-      get_from_local_file env['PATH_INFO']
+    if File.exists? "#{ self.class.path }#{ env['PATH_INFO'] }"
+      get_from_local_file "#{ self.class.path }#{ env['PATH_INFO'] }"
     else
       get_from_mirror "http://rubygems.org#{ env['PATH_INFO'] }"
     end
@@ -25,16 +25,16 @@ class RubygemsProxyCache
   def get_from_mirror(uri_str)
     uri  = URI( uri_str )
     resp = get( uri )
-
     write_cache!( resp, uri.path ) unless uri.path =~ /\/api\//
-    [ resp.code, resp.header, resp.body ]
+
+    [ resp.code, resp.header, [ resp.body ] ]
   end
 
   def write_cache!(resp, path)
-    dir = File.dirname( "#{ cache_path }#{ path }" )
+    dir = File.dirname( "#{ self.class.path }#{ path }" )
     FileUtils.mkdir_p( dir ) unless File.directory?( dir )
 
-    open( "#{ cache_path }#{ path }", "wb" ) do |file|
+    open( "#{ self.class.path }#{ path }", "wb" ) do |file|
       file.write( resp.body )
     end
   end
@@ -44,10 +44,10 @@ class RubygemsProxyCache
     content = file.read
     file.close
 
-    [ 200, {}, content ]
+    [ 200, {}, [ content ] ]
   end
 
-  def cache_path
+  def self.path
     '/home/gramos/srcs/rubygems-proxy-cache/cache'
   end
 end
