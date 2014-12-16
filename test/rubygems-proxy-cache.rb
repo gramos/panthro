@@ -12,6 +12,14 @@ def app
 end
 
 test 'should not cache api calls' do |cache_path|
-  get '/api/v1/dependencies?gems=sinatra'
+  head '/api/v1/dependencies'
+  assert last_response.ok?
   assert !File.directory?( "#{ cache_path }/api/v1" )
+end
+
+test 'should cache static files' do |cache_path|
+  spec_file_path = '/quick/Marshal.4.8/sinatra-1.4.5.gemspec.rz'
+  get spec_file_path
+  assert last_response.ok?
+  assert File.exists?( "#{ cache_path }#{ spec_file_path }" )
 end
