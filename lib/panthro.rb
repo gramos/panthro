@@ -3,8 +3,9 @@ require 'net/http'
 class Panthro
 
   def call( env )
-    @env       = env
-    @file_path = "#{ self.class.path }#{ env['PATH_INFO'] }"
+    @env          = env
+    @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
+    @query_string = @env['QUERY_STRING']
 
     return get_from_cache if File.exists? @file_path
     get_from_mirror
@@ -16,7 +17,7 @@ class Panthro
 
   def uri_str
     uri  = "http://rubygems.org#{ @env['PATH_INFO'] }"
-    uri += "?#{ @env['QUERY_STRING'] }" unless @env['QUERY_STRING'].empty?
+    uri += "?#{ @query_string }" unless @query_string.empty?
     uri
   end
 
@@ -24,31 +25,27 @@ class Panthro
     http    = Net::HTTP.new( uri.host, uri.port )
     request = Net::HTTP::Get.new( uri.request_uri )
     resp    = http.request( request )
-
-    if resp.code == '302'
-      resp = get( URI( resp['location'] ) )
-    end
-
+    resp    = get( URI( resp['location'] ) ) if resp.code == '302'
     resp
   end
 
   def get_from_mirror
-    uri  = URI( uri_str )
-    resp = get( uri )
-    write_cache!( resp, uri.path )
+    @uri  = URI( uri_str )
+    @resp = get( @uri )
+    write_cache!
 
-    [ resp.code, resp.to_hash, [ resp.body ] ]
+    [ @resp.code, @resp.to_hash, [ @resp.body ] ]
   end
 
-  def write_cache!( resp, path )
-    return if path =~ /\/api\//
-    return unless resp.code =~ /20/
+  def write_cache!
+    return if @uri.path =~ /\/api\//
+    return unless @resp.code =~ /20/
 
-    dir = File.dirname( "#{ self.class.path }#{ path }" )
+    dir = File.dirname( @file_path )
     FileUtils.mkdir_p( dir ) unless File.directory?( dir )
 
-    open( "#{ self.class.path }#{ path }", "wb" ) do |file|
-      file.write( resp.body )
+    open( @file_path, "wb" ) do |file|
+      file.write( @resp.body )
     end
   end
 
