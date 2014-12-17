@@ -34,7 +34,10 @@ class Panthro
     @resp = get( @uri )
     write_cache!
 
-    [ @resp.code, @resp.to_hash, [ @resp.body ] ]
+    headers = @resp.to_hash
+    headers.delete 'transfer-encoding'
+
+    [ @resp.code, headers, [ @resp.body ] ]
   end
 
   def write_cache!
