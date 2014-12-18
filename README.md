@@ -5,12 +5,15 @@ The idea is to speed up the gem command caching gem and spec files.
 Rubygems proxu cahce Is a rack app that cache static files into a
 local machine, where is run. Is does not cache /api calls.
 
+![Panthro Rubygems proxy cache](http://mobi-wall.brothersoft.com/files/208208/p/12829034032360.jpg)
+
 Install
 =======
 
 ```
-gem install panthro
-panthro
+git clone git@github.com:gramos/panthro.git
+cd panthro
+rackup
 ```
 Once is running you have to point rubygems to this new "mirror"
 
@@ -33,12 +36,12 @@ When you execute for example ```gem install sinatra```
 as you can see the firsts 2 calls are to https://api.rubygems.org/api/v1/
 to get the dependencies fo sinatra then it needs to get the file
 sinatra-1.4.5.gemspec.rz and so. The first time that you execute this
-it will download all the files from rubygems a saved them into the ./cache
+it will download all the files from rubygems and saved them into the ~/.panthro
 folder but if you run ```gem install sinatra``` a few minutes after this
 from the other machine in the same net ( obviously you have to add the source with
-gem sources --add http://the-proxy-ip:9292 ), it will do all the
-https://api.rubygems.org/api/v1/ again, but only these ones, because it already has
-all the other files:
+gem sources --add http://the-proxy-ip:4732 ), it will do all the
+https://api.rubygems.org/api/v1/ again, but only these, because it already has
+all the other files cached:
 
 
 ```
