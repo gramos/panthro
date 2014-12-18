@@ -36,6 +36,7 @@ class Panthro
 
     headers = @resp.to_hash
     headers.delete 'transfer-encoding'
+    headers.each{ |k,v| headers[k] = v.first }
 
     [ @resp.code, headers, [ @resp.body ] ]
   end
