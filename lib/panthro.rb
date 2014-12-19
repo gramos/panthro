@@ -5,7 +5,6 @@ class Panthro
   def call( env )
     @env          = env
     @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
-    @query_string = @env['QUERY_STRING']
 
     return get_from_cache if File.exists? @file_path
     get_from_mirror
@@ -13,11 +12,12 @@ class Panthro
 
   class << self
     attr_accessor :path
+    attr_accessor :mirror
   end
 
   def uri_str
-    uri  = "http://rubygems.org#{ @env['PATH_INFO'] }"
-    uri += "?#{ @query_string }" unless @query_string.empty?
+    uri  = "#{ Panthro.mirror }#{ @env['PATH_INFO'] }"
+    uri += "?#{ @env['QUERY_STRING'] }" unless @env['QUERY_STRING'].empty?
     uri
   end
 

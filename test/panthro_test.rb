@@ -8,6 +8,8 @@ include Rack::Test::Methods
 Panthro.path = File.expand_path('../cache', __FILE__)
 `rm -rf #{ Panthro.path }/*`
 
+Panthro.mirror = 'http://rubygems.org'
+
 def app
   Panthro.new
 end
