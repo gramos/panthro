@@ -1,0 +1,5 @@
+* Manage all the gem requests (including POST).
+* Expire cache.
+* Add a binary.
+* Make a gem package.
+* Works with https.
