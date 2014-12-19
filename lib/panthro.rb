@@ -2,7 +2,7 @@ require 'net/http'
 
 class Panthro
 
-  def call( env )
+  def call env
     @env          = env
     @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
 
@@ -21,17 +21,17 @@ class Panthro
     uri
   end
 
-  def get( uri )
+  def get uri
     http    = Net::HTTP.new( uri.host, uri.port )
     request = Net::HTTP::Get.new( uri.request_uri )
     resp    = http.request( request )
-    resp    = get( URI( resp['location'] ) ) if resp.code == '302'
+    resp    = get( URI resp['location']  ) if resp.code == '302'
     resp
   end
 
   def get_from_mirror
-    @uri  = URI( uri_str )
-    @resp = get( @uri )
+    @uri  = URI uri_str
+    @resp = get @uri
     write_cache!
 
     headers = @resp.to_hash
@@ -45,16 +45,16 @@ class Panthro
     return if @uri.path =~ /\/api\//
     return unless @resp.code =~ /20/
 
-    dir = File.dirname( @file_path )
-    FileUtils.mkdir_p( dir ) unless File.directory?( dir )
+    dir = File.dirname @file_path
+    FileUtils.mkdir_p dir unless File.directory? dir
 
     open( @file_path, "wb" ) do |file|
-      file.write( @resp.body )
+      file.write @resp.body
     end
   end
 
   def get_from_cache
-    file    = File.open( @file_path, "r" )
+    file    = File.open @file_path, "r"
     content = file.read
     file.close
 
