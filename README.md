@@ -2,7 +2,7 @@ Panthro: the rubygems proxy cache
 =================================
 
 The idea is to speed up the gem command caching gem and spec files.
-Rubygems proxu cahce Is a rack app that cache static files into a
+Rubygems proxy cache Is a rack app that cache static files into a
 local machine, where is runing. Is does not cache /api calls.
 
 ![Panthro Rubygems proxy cache](http://mobi-wall.brothersoft.com/files/208208/p/12829034032360.jpg)
