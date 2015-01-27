@@ -103,3 +103,12 @@ Successfully installed sinatra-1.4.5
 ```
 As you can see it takes 5 seconds using panthro and 20 without it,
 obviously it depends on your internet conection.
+
+Similar projects
+================
+
+There are other projects that does more or less the same thing,
+like [Geminabox proxy support](https://github.com/geminabox/geminabox#rubygems-proxy)
+or a regular web proxy like [Squid](http://www.squid-cache.org/). I've made this project
+as a Learning project and with purpose of keeping as simple and small as I can,
+Panthro only does one thing and is to cache gems.
