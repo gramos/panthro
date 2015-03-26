@@ -15,6 +15,8 @@ class Panthro
     attr_accessor :mirror
   end
 
+  private
+
   def uri_str
     uri  = "#{ Panthro.mirror }#{ @env['PATH_INFO'] }"
     uri += "?#{ @env['QUERY_STRING'] }" unless @env['QUERY_STRING'].empty?
