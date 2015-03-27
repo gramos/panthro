@@ -1,3 +1,31 @@
 #!/usr/bin/env ruby
+help = <<EOS
+PANTHRO(1)
+
+NAME
+panthro -- The rubygems proxy cache
+
+SYNOPSYS
+panthro [--start | --stop]
+
+DESCRIPTION
+The idea is to speed up the gem command caching gem and spec files. Rubygems proxy cache Is a rack app that cache static files into a local machine, where is runing. Is does not cache /api calls.
+EOS
+
 path = File.expand_path '../../', __FILE__
-`cd #{path}  && rackup -D`
+require "#{path}/lib/panthro"
+
+pid_file = "#{Panthro.path}/rack.pid"
+
+case ARGV[0]
+when '--start'
+  puts "Starting panthro server..."
+  `cd #{path}  && rackup --daemonize --pid #{pid_file}`
+when '--stop'
+  puts "Stopping panthro server..."
+  pid = File.read(pid_file).to_i
+  Process.kill 9, pid
+  File.delete pid_file
+else
+  puts help
+end

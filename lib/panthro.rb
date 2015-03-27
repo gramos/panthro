@@ -63,3 +63,6 @@ class Panthro
     [ 200, {}, [ content ] ]
   end
 end
+
+Panthro.path   = "#{ ENV['HOME'] }/.panthro"
+Panthro.mirror = 'http://rubygems.org'

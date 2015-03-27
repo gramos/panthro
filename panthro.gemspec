@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'panthro'
-  s.version     = '0.0.4'
+  s.version     = '0.0.5'
   s.date        = '2015-03-26'
   s.summary     = "Panthro: the rubygems proxy cache"
   s.description = "The idea is to speed up the gem command caching gem" +
