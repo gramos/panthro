@@ -11,9 +11,8 @@ Install
 =======
 
 ```
-git clone git@github.com:gramos/panthro.git
-cd panthro
-rackup
+gem install panthro
+panthro --start
 ```
 Once is running you have to point rubygems to this new "mirror"
 
