@@ -53,7 +53,7 @@ rack-protection-1.5.3.gem
 sinatra-1.4.5.gem
 ```
 
-You can use [rumb](http://github.com/gramos/rumb) to test the performance agaisnt using 
+You can use [rumb](http://github.com/gramos/rumb) to test the performance against using 
 rubygems.org directly:
 
 ```
