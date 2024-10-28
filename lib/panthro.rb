@@ -34,6 +34,7 @@ class Panthro
 
   def get_from_mirror
     @uri  = URI uri_str
+    puts "[ MIRROR ] GET: #{@uri}" 
     @resp = get @uri
     write_cache!
 
@@ -41,11 +42,11 @@ class Panthro
     headers.delete 'transfer-encoding'
     headers.each{ |k,v| headers[k] = v.first }
 
-    [ @resp.code, headers, [ @resp.body ] ]
+    [ @resp.code.to_i, headers, [ @resp.body ] ]
   end
 
   def write_cache!
-    return if @uri.path =~ /\/api\//
+    return if @uri.path =~ /\/info\//
     return unless @resp.code =~ /20/
 
     dir = File.dirname @file_path
@@ -58,6 +59,7 @@ class Panthro
 
   def get_from_cache
     file    = File.open @file_path, "r"
+    puts "[ CACHE ] GET: #{@file_path}" 
     content = file.read
     file.close
 
