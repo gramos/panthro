@@ -8,17 +8,17 @@ include Rack::Test::Methods
 Panthro.path = File.expand_path('../cache', __FILE__)
 `rm -rf #{ Panthro.path }/*`
 
-Panthro.mirror = 'http://rubygems.org'
+Panthro.mirror = 'https://index.rubygems.org'
 
 def app
   Panthro.new
 end
 
 test 'should not cache api calls' do
-  head '/api/v1/dependencies'
+  head '/versions'
 
   assert last_response.ok?
-  assert !File.directory?( "#{ Panthro.path }/api/v1" )
+  assert !File.directory?( "#{ Panthro.path }/versions" )
 end
 
 test 'should redirect the query' do

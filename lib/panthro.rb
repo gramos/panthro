@@ -6,7 +6,7 @@ class Panthro
     @env          = env
     @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
 
-    return get_from_cache if File.exists? @file_path
+    return get_from_cache if File.exist? @file_path
     get_from_mirror
   end
 
@@ -24,10 +24,11 @@ class Panthro
   end
 
   def get uri
-    http    = Net::HTTP.new( uri.host, uri.port )
-    request = Net::HTTP::Get.new( uri.request_uri )
-    resp    = http.request( request )
-    resp    = get( URI resp['location']  ) if resp.code == '302'
+    http         = Net::HTTP.new( uri.host, uri.port )
+    http.use_ssl = true
+    request      = Net::HTTP::Get.new( uri.request_uri )
+    resp         = http.request( request )
+    resp         = get( URI resp['location']  ) if resp.code == '302'
     resp
   end
 
@@ -65,4 +66,4 @@ class Panthro
 end
 
 Panthro.path   = "#{ ENV['HOME'] }/.panthro"
-Panthro.mirror = 'http://rubygems.org'
+Panthro.mirror = 'https://index.rubygems.org'
