@@ -6,6 +6,7 @@ class Panthro
     @env          = env
     @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
 
+    return get_from_mirror if env['PATH_INFO'] == '/'
     return get_from_cache if File.exist? @file_path
     get_from_mirror
   end
@@ -34,9 +35,9 @@ class Panthro
 
   def get_from_mirror
     @uri  = URI uri_str
-    puts "[ MIRROR ] GET: #{@uri}" 
+    puts "[ MIRROR - GET ]: #{@uri}"
     @resp = get @uri
-    write_cache!
+    write_cache! unless @env['PATH_INFO'] == '/'
 
     headers = @resp.to_hash
     headers.delete 'transfer-encoding'
@@ -51,7 +52,7 @@ class Panthro
 
     dir = File.dirname @file_path
     FileUtils.mkdir_p dir unless File.directory? dir
-
+    puts "[ CACHE *WRITE* ] #{@file_path}"
     open( @file_path, "wb" ) do |file|
       file.write @resp.body
     end
@@ -59,7 +60,7 @@ class Panthro
 
   def get_from_cache
     file    = File.open @file_path, "r"
-    puts "[ CACHE ] GET: #{@file_path}" 
+    puts "[ CACHE GET ]: #{@file_path}"
     content = file.read
     file.close
 
