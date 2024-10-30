@@ -12,9 +12,7 @@ class Panthro
   end
 
   class << self
-    attr_accessor :path
-    attr_accessor :mirror
-    attr_accessor :disable_logs
+    attr_accessor :path, :mirror, :disable_logs
   end
 
   private
