@@ -12,8 +12,8 @@ class Panthro
     return get_from_mirror if env['PATH_INFO'] == '/'
     load_etag_from_file_system
 
-    # return get_from_cache if File.exist? file_path
     get_from_mirror
+    return get_from_cache if File.exist? file_path
   end
 
   class << self
@@ -23,9 +23,11 @@ class Panthro
   private
 
   def load_etag_from_file_system
-    @etag = "*"
-    @etag = File.basename(Dir.glob(file_path).first).split(".___").first
-    puts "ETAG LOADED: #{@etag}"
+    matched_file = Dir.glob(file_path("*"))
+    return if matched_file.empty?
+
+    @etag = File.basename(matched_file.first).split(".___").first
+    @etag = "\"#{@etag}\""
   end
 
   def uri_str
@@ -37,7 +39,8 @@ class Panthro
   def get uri
     http         = Net::HTTP.new( uri.host, uri.port )
     http.use_ssl = true
-    request      = Net::HTTP::Get.new( uri.request_uri )
+    request      = Net::HTTP::Get.new( uri.request_uri, {'If-None-Match' => @etag} )
+
     resp         = http.request( request )
     resp         = get( URI resp['location']  ) if resp.code == '302'
     resp
@@ -45,14 +48,14 @@ class Panthro
 
   def get_from_mirror
     @uri  = URI uri_str
-    log(:get_mirror)
     @resp = get @uri
+    log(:get_mirror)
+
     @headers = @resp.to_hash
     @headers.delete 'transfer-encoding'
     @headers.each{ |k,v| @headers[k] = v.first }
     @etag = @headers['etag'] && @headers['etag'].tr('"','')
-
-    write_cache! unless @env['PATH_INFO'] == '/'
+    write_cache! unless @env['PATH_INFO'] == '/' or @resp.code.to_i == 304
 
     [ @resp.code.to_i, @headers, [ @resp.body ] ]
   end
@@ -77,14 +80,15 @@ class Panthro
     [ 200, {}, [ content ] ]
   end
 
-  def file_path
-    "#{ self.class.path }#{@dir}/#{@etag}.___#{ @basename }"
+  def file_path(prefix = nil)
+    pre = prefix || @etag
+    "#{ self.class.path }#{@dir}/#{pre}.___#{ @basename }"
   end
 
   def log(action)
     actions = {
-      :get_mirror  => "[ GET MIRROR ] #{@uri}",
-      :get_cache   => "[ GET CACHE ] #{file_path}",
+      :get_mirror  => "[ MIRROR ] #{@uri} -- [ #{@resp.code} ]",
+      :get_cache   => "[ CACHE ] #{file_path}",
       :write_cache => "[ WRITE CACHE ] #{file_path}"
     }
 
