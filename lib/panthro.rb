@@ -14,6 +14,7 @@ class Panthro
   class << self
     attr_accessor :path
     attr_accessor :mirror
+    attr_accessor :disable_logs
   end
 
   private
@@ -73,7 +74,7 @@ class Panthro
       :write_cache => "[ WRITE CACHE ] #{@file_path}"
     }
 
-    puts actions[action]
+    puts actions[action] unless Panthro.disable_logs
   end
 end
 
