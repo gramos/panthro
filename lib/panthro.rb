@@ -35,7 +35,6 @@ class Panthro
 
   def get_from_mirror
     @uri  = URI uri_str
-    puts "[ MIRROR - GET ]: #{@uri}"
     @resp = get @uri
     write_cache! unless @env['PATH_INFO'] == '/'
 
@@ -47,12 +46,11 @@ class Panthro
   end
 
   def write_cache!
-    return if @uri.path =~ /\/info\//
     return unless @resp.code =~ /20/
 
     dir = File.dirname @file_path
     FileUtils.mkdir_p dir unless File.directory? dir
-    puts "[ CACHE *WRITE* ] #{@file_path}"
+
     open( @file_path, "wb" ) do |file|
       file.write @resp.body
     end
@@ -60,7 +58,6 @@ class Panthro
 
   def get_from_cache
     file    = File.open @file_path, "r"
-    puts "[ CACHE GET ]: #{@file_path}"
     content = file.read
     file.close
 
