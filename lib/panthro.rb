@@ -10,6 +10,8 @@ class Panthro
     @basename = File.basename env['PATH_INFO']
 
     return get_from_mirror if env['PATH_INFO'] == '/'
+    load_etag_from_file_system
+
     # return get_from_cache if File.exist? file_path
     get_from_mirror
   end
@@ -19,6 +21,12 @@ class Panthro
   end
 
   private
+
+  def load_etag_from_file_system
+    @etag = "*"
+    @etag = File.basename(Dir.glob(file_path).first).split(".___").first
+    puts "ETAG LOADED: #{@etag}"
+  end
 
   def uri_str
     uri  = "#{ Panthro.mirror }#{ @env['PATH_INFO'] }"
@@ -42,6 +50,7 @@ class Panthro
     @headers = @resp.to_hash
     @headers.delete 'transfer-encoding'
     @headers.each{ |k,v| @headers[k] = v.first }
+    @etag = @headers['etag'] && @headers['etag'].tr('"','')
 
     write_cache! unless @env['PATH_INFO'] == '/'
 
@@ -69,8 +78,7 @@ class Panthro
   end
 
   def file_path
-    prefix = @headers['etag'] && @headers['etag'].tr('"','')
-    "#{ self.class.path }#{@dir}/#{prefix}.___#{ @basename }"
+    "#{ self.class.path }#{@dir}/#{@etag}.___#{ @basename }"
   end
 
   def log(action)
