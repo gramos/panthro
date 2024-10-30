@@ -5,7 +5,8 @@ require 'panthro'
 
 include Rack::Test::Methods
 
-Panthro.path = File.expand_path('../cache', __FILE__)
+Panthro.disable_logs = true
+Panthro.path         = File.expand_path('../cache', __FILE__)
 `rm -rf #{ Panthro.path }/*`
 
 Panthro.mirror = 'https://index.rubygems.org'

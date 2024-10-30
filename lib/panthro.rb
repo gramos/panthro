@@ -12,8 +12,7 @@ class Panthro
   end
 
   class << self
-    attr_accessor :path
-    attr_accessor :mirror
+    attr_accessor :path, :mirror, :disable_logs
   end
 
   private
@@ -35,6 +34,7 @@ class Panthro
 
   def get_from_mirror
     @uri  = URI uri_str
+    log(:get_mirror)
     @resp = get @uri
     write_cache! unless @env['PATH_INFO'] == '/'
 
@@ -48,20 +48,31 @@ class Panthro
   def write_cache!
     return unless @resp.code =~ /20/
 
+    log(:write_cache)
     dir = File.dirname @file_path
     FileUtils.mkdir_p dir unless File.directory? dir
-
     open( @file_path, "wb" ) do |file|
       file.write @resp.body
     end
   end
 
   def get_from_cache
+    log(:get_cache)
     file    = File.open @file_path, "r"
     content = file.read
     file.close
 
     [ 200, {}, [ content ] ]
+  end
+
+  def log(action)
+    actions = {
+      :get_mirror  => "[ GET MIRROR ] #{@uri}",
+      :get_cache   => "[ GET CACHE ] #{@file_path}",
+      :write_cache => "[ WRITE CACHE ] #{@file_path}"
+    }
+
+    puts actions[action] unless Panthro.disable_logs
   end
 end
 
