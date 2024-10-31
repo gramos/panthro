@@ -1,6 +1,7 @@
 Panthro: the rubygems proxy cache
 =================================
 
+!!! This project is a toy, is not usable for serious !!!
 The idea is to speed up the gem command caching gem and spec files.
 Rubygems proxy cache Is a rack app that cache static files into a
 local machine, where is runing. Is does not cache /api calls.
@@ -23,7 +24,7 @@ gem sources --add http://localhost:9292
 And remove rubygems mirror:
 
 ```
-gem sources --remove http://rubygems.org
+gem sources --remove https://rubygems.org
 ```
 Then you can start installing gems, and static files like
 *.gem *.spec.gz will be cached in ~/.panthro folder.
@@ -40,8 +41,8 @@ The first time that you execute this it will download all the files
 from rubygems and saved them into the ~/.panthro folder but if you
 run ```gem install sinatra``` again from the other machine in the
 same net ( obviously you have to add the source with
-gem sources --add http://the-proxy-ip:4732 ), it will do all the
-https://api.rubygems.org/api/v1/ again, but only these, because it already has
+gem sources --add http://the-proxy-ip:9292 ), it will do all the
+https://index.rubygems.org/quick/Marshal.4.8/ again, but only these, because it already has
 all the other files cached:
 
 ```
@@ -58,7 +59,7 @@ rubygems.org directly:
 
 ```
 gem install rumb
-rumb rails http://localhost:4732 https://rubygems.org
+rumb rails http://localhost:9292 https://rubygems.org
 
 ###--------- RUMB Rubygems Mirror Benchmarks -------------###
 
