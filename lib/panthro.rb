@@ -5,8 +5,9 @@ class Panthro
   def call env
     @env          = env
     @file_path    = "#{ self.class.path }#{ env['PATH_INFO'] }"
+    @path         = env['PATH_INFO']
 
-    return get_from_mirror if env['PATH_INFO'] == '/'
+    return get_from_mirror if (@path == '/' or @path =~ /\/info/)
     return get_from_cache if File.exist? @file_path
     get_from_mirror
   end
@@ -36,7 +37,7 @@ class Panthro
     @uri  = URI uri_str
     log(:get_mirror)
     @resp = get @uri
-    write_cache! unless @env['PATH_INFO'] == '/'
+    write_cache! unless (@path == '/' or @path =~ /\/info/)
 
     headers = @resp.to_hash
     headers.delete 'transfer-encoding'

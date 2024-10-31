@@ -26,7 +26,7 @@ test 'should redirect the query' do
   get '/info/sinatra'
 
   assert last_response.ok?
-  assert !File.directory?( "#{ Panthro.path }/info/sinatra" )
+  assert !File.exist?( "#{ Panthro.path }/info/sinatra" )
 end
 
 test 'should return the same response code got it from rubygems' do
