@@ -6,9 +6,10 @@ NAME
 panthro -- The rubygems proxy cache
 
 SYNOPSYS
-panthro [--start | --stop]
+panthro [--start | --startd | --stop]
 
 DESCRIPTION
+!!! This project is a toy, is not usable for serious !!!
 The idea is to speed up the gem command caching gem and spec files. Rubygems proxy cache Is a rack app that cache static files into a local machine, where is runing. Is does not cache /api calls.
 EOS
 
@@ -20,6 +21,9 @@ pid_file = "#{Panthro.path}/rack.pid"
 case ARGV[0]
 when '--start'
   puts "Starting panthro server..."
+  `cd #{path}  && rackup`
+when '--startd'
+  puts "Starting panthro daemon server..."
   `cd #{path}  && rackup --daemonize --pid #{pid_file}`
 when '--stop'
   puts "Stopping panthro server..."

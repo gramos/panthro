@@ -17,7 +17,7 @@ panthro --start
 Once is running you have to point rubygems to this new "mirror"
 
 ```
-gem sources --add http://localhost:4732
+gem sources --add http://localhost:9292
 ```
 
 And remove rubygems mirror:
@@ -26,7 +26,7 @@ And remove rubygems mirror:
 gem sources --remove http://rubygems.org
 ```
 Then you can start installing gems, and static files like
-*.gem *.spec.gz will be cached in ./cache folder.
+*.gem *.spec.gz will be cached in ~/.panthro folder.
 
 How it works
 ============
@@ -64,10 +64,10 @@ rumb rails http://localhost:4732 https://rubygems.org
 
 => Removing https://rubygems.org from rubygems sources...
 https://rubygems.org removed from sources
-=> Adding http://localhost:4732 to sources
-http://localhost:4732 added to sources
+=> Adding http://localhost:9292 to sources
+http://localhost:9292 added to sources
 
-=> Starting installing sinatra from: http://localhost:4732
+=> Starting installing sinatra from: http://localhost:9292
 Fetching: rack-1.6.0.gem (227328B)
 Successfully installed rack-1.6.0
 Fetching: tilt-1.4.1.gem (42496B)
@@ -78,11 +78,11 @@ Fetching: sinatra-1.4.5.gem (346624B)
 Successfully installed sinatra-1.4.5
 4 gems installed
 
-### --- BENCHMARK RESULTS FOR http://localhost:4732 --- ###
+### --- BENCHMARK RESULTS FOR http://localhost:9292 --- ###
 0.000000   0.000000   1.360000 (  5.212372)
 
-=> Removing http://localhost:4732 from rubygems sources...
-http://localhost:4732 removed from sources
+=> Removing http://localhost:9292 from rubygems sources...
+http://localhost:9292 removed from sources
 => Adding https://rubygems.org to sources
 https://rubygems.org added to sources
 
