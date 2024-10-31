@@ -33,9 +33,16 @@ How it works
 ============
 
 When you execute for example ```gem install sinatra```
-the firsts 2 calls are to https://api.rubygems.org/api/v1/
+the firsts 2 calls are:
+
+```
+HEAD https://index.rubygems.org/versions
+200 OK
+GET https://index.rubygems.org/info/sinatra
+```
+
 to get the dependencies of sinatra, then it needs to get the file
-sinatra-1.4.5.gemspec.rz and so, you can see the details runing:
+sinatra-4.0.0.gemspec.rz and so, you can see the details runing:
 ```gem install sinatra --verbose```
 The first time that you execute this it will download all the files
 from rubygems and saved them into the ~/.panthro folder but if you
