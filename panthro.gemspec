@@ -12,12 +12,12 @@ Gem::Specification.new do |s|
   s.email       = 'ramos.gaston@gmail.com'
   s.files       = ['lib/panthro.rb', 'config.ru']
   s.executables = ['panthro']
-  s.default_executable = 'panthro'
   s.homepage    = 'https://github.com/gramos/panthro'
   s.license     = 'GPLv3'
   s.post_install_message = "\n\e[1m<<< Panthro: The rubygems proxy cache >>>\e[0m\n" +
                            File.read('ascii-art.txt') + "\n"
 
+  s.required_ruby_version = '>= 3.0'
   s.add_development_dependency "cutest", "~> 1.2"
 
   s.add_dependency "rack", "~> 3.1"
