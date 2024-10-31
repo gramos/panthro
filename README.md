@@ -53,15 +53,14 @@ https://index.rubygems.org/quick/Marshal.4.8/ again, but only these, because it 
 all the other files cached:
 
 ```
-sinatra-1.4.5.gemspec.rz
-tilt-1.4.1.gemspec.rz
-tilt-1.4.1.gem
-rack-protection-1.5.3.gemspec.rz
-rack-protection-1.5.3.gem
-sinatra-1.4.5.gem
+sinatra-4.0.0.gem
+tilt-2.4.0.gem
+rack-session-2.0.0.gem
+rack-protection-4.0.0.gem
+mustermann-3.0.3.gem
 ```
 
-You can use [rumb](http://github.com/gramos/rumb) to test the performance agaisnt using 
+You can use [rumb](http://github.com/gramos/rumb) to test the performance agaisnt using
 rubygems.org directly:
 
 ```
