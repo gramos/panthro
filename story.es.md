@@ -1,10 +1,10 @@
-Acerca de este proyecto
-========================
+Panthro: the rubygems proxy/cache
+=================================
 
 Los incios 2014~2015
 =====================
 
-Empecé este proyecto en el anio 2014, cuando arranqué lo hice por dos motivos
+Empecé este proyecto en el año 2014, cuando arranqué lo hice por dos motivos
 principales, el primero era ver si podía acelerar la instalación de gemas,
 estaba trabajando en proyecto en particular que requeria hacer pruebas, esas
 pruebas incluían la instalación de gemas, como rails entonces necesitaba
@@ -24,11 +24,11 @@ Así era la primer versión:
 
 https://github.com/gramos/panthro/blob/v0.0.5/lib/panthro.rb
 
-Hoy 10 anos mas tarde 2024
+Hoy 10 años mas tarde 2024
 ===========================
 
 Retomé este proyecto con el mismo objetivo que en el pasado, aprender
-y divertirme, el primer día al probarlo por primera vez en 10 anos,
+y divertirme, el primer día al probarlo por primera vez en 10 años,
 obviamente no funcionaba nada, así que me dediqué a hacerlo funcionar
 con las versiones actuales de ruby, rack y rubygems. En poco tiempo
 lo logré y estaba andando luego de varios ajustes y cambios debidos
@@ -73,12 +73,12 @@ Fetching cuba-4.0.3.gem
 
 Como podemos observar las primeras llamadas son:
 
+<pre>
 /info/cuba
 /quick/Marshal.4.8/cuba-4.0.3.gemspec.rz
+</pre>
 
-/info/cuba
-
-trae información de todas las versiones de la gema consultada,
+/info/cuba trae información de todas las versiones de la gema consultada,
 en este caso cuba, en formato de texto plano. Para mayores
 detalles podemos consultar la documentación
 
@@ -88,7 +88,10 @@ luego de esto hace un request a la api para traerse el /info
 de cada dependecia y finalmente se trae la gema y todas las
 gemas de las que depende:
 
+
+<pre>
 GET http://localhost:9292/gems/cuba-4.0.3.gem
+</pre>
 
 Bueno, así es más o menos como trabaja rubygems,
 ahora bien podrímoas inferir entonces que si
@@ -98,7 +101,7 @@ server, al instalar una gema grande con muchas dependencias
 como rails por ejemplo, la instalación debería ser
 mucho más rápida. Malas noticias...no es así,
 en el pasado cuando hice la primer versión funcionaba
-perefecto, pero ahora después de 10 anios rubygems
+perefecto, pero ahora después de 10 años rubygems
 ha mejorado mucho y es mucho más råpido que antes,
 dicho esto, no comprendo con exatitud por que
 Pantrho no es mås råpido que rubygems. Poe que
